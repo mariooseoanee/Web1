@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PIEDRA, PAPEL O RULETA</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <article class="juego">
+    <header class="cabecera">
+      <h1>PIEDRA, PAPEL O ... ¡RULETA!</h1>
+      <p class="subtitulo">Gana el Piedra, Papel o Tijera... o prueba la suerte de la ruleta rusa.</p>
+    </header>
+
+    <main class="panel">
+      <section class="marcador">
+        <article class="ficha" id="jugador-box">
+          <h2>JUGADOR</h2>
+          <output class="icono" id="jugador-opcion">❓</output>
+        </article>
+        
+        <span class="vs">VS</span>
+
+        <article class="ficha" id="bot-box">
+          <h2>IA</h2>
+          <output class="icono" id="bot-opcion">❓</output>
+        </article>
+      </section>
+
+      
+
+      <section class="controles">
+        <nav id="ppt-botones" class="opciones">
+          <button type="button" class="btn btn-opcion" data-opcion="rock">🪨 Piedra</button>
+          <button type="button" class="btn btn-opcion" data-opcion="paper">📄 Papel</button>
+          <button type="button" class="btn btn-opcion" data-opcion="scissors">✂️ Tijera</button>
+        </nav>
+
+        
+      </section>
+
+      <section class="consola">
+        <aside id="log" class="mensajes"></aside>
+      </section>
+    </main>
+  </article>
+
+ 
+  
+  <script src="app.js"></script>
+</body>
+</html>
