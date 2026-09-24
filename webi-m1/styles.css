@@ -24,6 +24,7 @@ body {
 }
 
 .juego {
+  display: flex;
   width: 75%;
   background: var(--panel);
   padding: 25px;
@@ -173,4 +174,74 @@ body {
   overflow-y: auto;
   border: 1px solid #222;
   margin-top: 10px;
+}
+
+.linea { 
+  font-size: 0.9rem; 
+  margin-bottom: 4px; 
+}
+
+.linea.info { 
+  color: var(--azul); 
+}
+
+.linea.alerta { 
+  color: var(--rojo); 
+  font-size: 1rem; 
+}
+
+.modal {
+  position: fixed;
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  border: none;
+  color: var(--texto);
+  z-index: 100;
+}
+
+.modal-caja {
+  background: var(--panel);
+  padding: 30px;
+  border-radius: 10px;
+  border: 2px solid var(--azul);
+  text-align: center;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 0 25px rgba(102, 252, 241, 0.3);
+}
+
+.modal-caja h2 {
+  color: var(--azul);
+  font-size: 1.4rem;
+}
+
+.modal-caja p {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--texto);
+}
+
+.btn-accion {
+  background: var(--azul);
+  color: #000;
+  border: none;
+  margin-top: 10px;
+}
+
+.btn-accion:hover {
+  background: #fff;
+  box-shadow: 0 0 10px var(--azul);
+}
+
+/* OCULTAR ELEMENTOS (.oculto estara por encima de cualquier display) */
+.oculto { 
+  display: none !important; 
 }
