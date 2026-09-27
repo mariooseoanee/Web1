@@ -3,7 +3,8 @@ const estadoPartida = {
   posActual: 0,
   perdedor: null,
   enProceso: false,
-  rotacion: 0
+  rotacion: 0,
+  primerDisparo: true
 };
 
 const ICONOS = {
@@ -14,6 +15,7 @@ const ICONOS = {
 
 const btnsPPT = document.getElementById('ppt-botones');
 const btnIniciar = document.getElementById('btn-iniciar');
+const btnDisparar = document.getElementById('btn-disparar');
 const jugadorOp = document.getElementById('jugador-opcion');
 const botOp = document.getElementById('bot-opcion');
 const tambor = document.getElementById('tambor');
@@ -24,10 +26,11 @@ const modal = document.getElementById('modal')
 
 function iniciarJuego() {
   estadoPartida.posActual = 0;
-  estadoPartida.posBala = Math.floor(Math.random() * 6) + 1;
+  estadoPartida.posBala = Math.floor(Math.random() * 6);
   estadoPartida.perdedor = null;
   estadoPartida.enProceso = false;
   estadoPartida.rotacion = 0;
+  estadoPartida.primerDisparo = true;
 
   jugadorOp.textContent = '❓';
   botOp.textContent = '❓';
@@ -40,6 +43,7 @@ function iniciarJuego() {
 
   modal.classList.add('oculto');
   btnsPPT.classList.remove('oculto');
+  btnDisparar.classList.add('oculto');
 }
 
 
@@ -62,7 +66,7 @@ function jugarRonda(opcionJugador) {
 
   jugadorOp.textContent = ICONOS[opcionJugador];
 
-  // (tiempo entre repeticiones 70ms)
+  // (tiempo entre cambios de icono 70ms)
   const intervalo = setInterval(() => {
     botOp.textContent = ICONOS[opciones[(contador + 1) % 3]]; // se hace como la animacion de aleatoriedad rotando los iconos
     contador++;
@@ -97,7 +101,58 @@ function evaluarResultado(jugador, bot) {
   agregarMsj(`${estadoPartida.perdedor === 'jugador' ? 'IA' : 'Jugador'} gana. Perdió ${perdedorTexto}.`, 'alerta');
 
   btnsPPT.classList.add('oculto'); // desaparecen los botones para momento ruleta
+
+
+  // segun quien perdio
+  if (estadoPartida.perdedor === 'jugador') {
+    btnDisparar.classList.remove('oculto');
+    estadoPartida.enProceso = false;
+  } else {
+    setTimeout(() => disparar(), 1200);
+  }
 } 
+
+btnDisparar.addEventListener('click', () => {
+  if (estadoPartida.perdedor === 'jugador' 
+    && !estadoPartida.enProceso) {
+    disparar();
+  }
+});
+
+function disparar() {
+  estadoPartida.enProceso = true;
+  btnDisparar.classList.add('oculto');
+
+  if (estadoPartida.primerDisparo) {
+    estadoPartida.rotacion += 720; 
+    tambor.style.transform = `rotate(${estadoPartida.rotacion}deg)`;
+    estadoPartida.primerDisparo = false;
+  }
+
+  const tirador = estadoPartida.perdedor === 'jugador' ? 'El Jugador' : 'La IA';
+  agregarMsj(`${tirador} aprieta el gatillo...`, 'alerta');
+
+  setTimeout(() => {
+    const esBala = estadoPartida.posActual === estadoPartida.posBala;
+
+    if (esBala) {
+      huecos[estadoPartida.posActual].classList.add('bala');
+      agregarMsj(`¡DISPARO! La bala estaba en la recámara ${estadoPartida.posActual + 1}.`, 'alerta');
+    
+    } else {
+      huecos[estadoPartida.posActual].classList.add('vacio');
+      agregarMsj(`*CLICK*. Recámara ${estadoPartida.posActual + 1} vacía. Sobrevive.`, 'acierto');
+
+      estadoPartida.posActual++;
+      estadoPartida.enProceso = false;
+
+      jugadorOp.textContent = '❓';
+      botOp.textContent = '❓';
+      pptBotones.classList.remove('oculto');
+    }
+
+  }, 1100);
+}
 
 function agregarMsj(texto, tipo) {
   const p = document.createElement('p');

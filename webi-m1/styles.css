@@ -132,6 +132,7 @@ body {
   background: #111;
   border: 4px solid #444;
   position: relative;
+  transition: transform 1s cubic-bezier(0.15, 0.85, 0.35, 1.2);
 }
 
 .hueco {
@@ -145,6 +146,16 @@ body {
   left: 50%;
   margin: -17.5px;
   transition: background 0.3s, border-color 0.3s;
+}
+
+.hueco.vacio {
+  border-color: var(--verde);
+  box-shadow: 0 0 8px var(--verde);
+}
+
+.hueco.bala {
+  background: var(--rojo);
+  box-shadow: 0 0 12px var(--rojo);
 }
 
 .eje {
@@ -188,6 +199,10 @@ body {
 .linea.alerta { 
   color: var(--rojo); 
   font-size: 1rem; 
+}
+
+.linea.acierto { 
+  color: var(--verde); 
 }
 
 .modal {
@@ -244,4 +259,11 @@ body {
 /* OCULTAR ELEMENTOS (.oculto estara por encima de cualquier display) */
 .oculto { 
   display: none !important; 
+}
+
+.btn-disparo { 
+  background: var(--rojo); 
+  color: #fff; 
+  box-shadow: 0 0 10px var(--rojo); 
+  margin-top: 10px;
 }
