@@ -22,6 +22,8 @@ const tambor = document.getElementById('tambor');
 const huecos = document.querySelectorAll('.hueco');
 const log = document.getElementById('log');
 const modal = document.getElementById('modal')
+const tituloModal = document.getElementById('modal-titulo');
+const mensajeModal = document.getElementById('modal-mensaje');
 
 
 function iniciarJuego() {
@@ -36,10 +38,16 @@ function iniciarJuego() {
   botOp.textContent = '❓';
   tambor.style.transform = 'rotate(0deg)';
 
-  huecos.forEach(h => h.classList.remove('activo', 'bala'));
+  huecos.forEach(h => h.classList.remove('activo', 'vacio', 'bala'));
+
+  log.innerHTML = '';
 
   agregarMsj('Partida iniciada. Tambor cargado con 1 bala.', 'info');
   agregarMsj('Elige Piedra, Papel o Tijera para empezar el duelo.', 'info');
+
+  tituloModal.textContent = 'BIENVENIDO';
+  mensajeModal.textContent = 'Compite contra la I.A. en Piedra, Papel o Tijera. Quien pierda la ronda, probará suerte con el tambor.';
+  btnIniciar.textContent = 'Iniciar Duelo';
 
   modal.classList.add('oculto');
   btnsPPT.classList.remove('oculto');
@@ -127,6 +135,9 @@ function disparar() {
     estadoPartida.rotacion += 720; 
     tambor.style.transform = `rotate(${estadoPartida.rotacion}deg)`;
     estadoPartida.primerDisparo = false;
+  } else {
+    estadoPartida.rotacion -= 60; 
+    tambor.style.transform = `rotate(${estadoPartida.rotacion}deg)`;
   }
 
   const tirador = estadoPartida.perdedor === 'jugador' ? 'El Jugador' : 'La IA';
@@ -138,6 +149,10 @@ function disparar() {
     if (esBala) {
       huecos[estadoPartida.posActual].classList.add('bala');
       agregarMsj(`¡DISPARO! La bala estaba en la recámara ${estadoPartida.posActual + 1}.`, 'alerta');
+      
+      setTimeout(() => {
+        terminarPartida(estadoPartida.perdedor);
+      }, 1500);
     
     } else {
       huecos[estadoPartida.posActual].classList.add('vacio');
@@ -148,7 +163,7 @@ function disparar() {
 
       jugadorOp.textContent = '❓';
       botOp.textContent = '❓';
-      pptBotones.classList.remove('oculto');
+      btnsPPT.classList.remove('oculto');
     }
 
   }, 1100);
@@ -161,6 +176,15 @@ function agregarMsj(texto, tipo) {
   log.appendChild(p);
   log.scrollTop = log.scrollHeight;
  
+}
+
+function terminarPartida(perdedor) {
+  tituloModal.textContent = perdedor === 'jugador' ? '¡ELIMINADO!' : '¡HAS SOBREVIVIDO!';
+  mensajeModal.textContent = perdedor === 'jugador' ? 'Te han disparado en tu turno. La IA se lleva la victoria.' : 'La bala ha salido contra la IA. Has ganado el duelo.';
+  
+  btnIniciar.textContent = 'Jugar de Nuevo';
+  
+  modal.classList.remove('oculto');
 }
 
 btnIniciar.addEventListener('click', iniciarJuego);
