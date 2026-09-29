@@ -5,6 +5,8 @@ Misión M1 · El Despertar del DOM — Web Development I.
 ## Cómo probarlo
 Abre index.html en el navegador (o con Live Server). Pulsa «Iniciar Duelo», y comenzarán las rondas del clásico juego Piedra, Papel o Tijera, pero al final de cada una de estas rondas, el perdedor tendrá que tirar de la ruleta.
 Habrá tantas rondas como disparos se realicen (hasta que se dispare la bala que se encuentra en el tambor, en una posición aleatoria).
+<br>
+Modo claro por defecto al iniciar la aplicación, se alterna con la letra oculta 'n'.
 
 ## Uso de IA
 Utilice Gemini Plus para ayudarme a mejorar visualmente el proyecto, para las transiciones y animaciones de este (sobre todo la ruleta), en cuanto a la logica para el js, no utilicé ningún tipo de ayuda de ninguna inteligencia artificial.
