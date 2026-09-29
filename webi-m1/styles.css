@@ -1,12 +1,28 @@
 :root {
+  --fondo: #eef2f7;
+  --panel: #ffffff;
+  --azul: #0077ff;
+  --verde: #05b300;
+  --rojo: #d90429; 
+  --texto: #1a202c;
+  --fondoLog: #c2bfbf;
+  --fondoBtn: #cbcccd;
+}
+
+body.modo-oscuro {
   --fondo: #0b0c10;
   --panel: #1f2833;
   --azul: #66fcf1;
   --verde: #17ff13;
   --rojo: #ff0055;
   --texto: #c5c6c7;
+  --fondoLog: #000;
+  --fondoBtn: #2a363b;
 }
 
+body, .juego, .panel, button, dialog {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
 * {
   box-sizing: border-box;
   margin: 0;
@@ -57,7 +73,7 @@ body {
 }
 
 .ficha {
-  background: #0b0c10;
+  background: var(--fondoLog);
   padding: 15px;
   border-radius: 8px;
   width: 25%;
@@ -102,9 +118,9 @@ body {
 }
 
 .btn-opcion {
-  background: #2a363b;
-  color: var(--azul);
-  border: 1px solid var(--azul);
+  background: var(--fondoBtn);
+  color: var(--texto);
+  border: 1px solid var(--texto);
 }
 
 .btn-opcion:hover {
@@ -178,12 +194,11 @@ body {
 
 
 .consola {
-  background: #000;
+  background: var(--fondoLog);
   border-radius: 6px;
   padding: 10px;
   height: 200px;
   overflow-y: auto;
-  border: 1px solid #222;
   margin-top: 10px;
 }
 

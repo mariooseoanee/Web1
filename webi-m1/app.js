@@ -102,11 +102,12 @@ function evaluarResultado(jugador, bot) {
   const victJugador = { rock: 'scissors', paper: 'rock', scissors: 'paper' };
   const ganoJug = victJugador[jugador] === bot;
 
-  estadoPartida.perdedor = ganoJug ? 'bot' : 'jugador';
+  const ganador = ganoJug ? 'Jugador' : 'IA';
+  const perdedor = ganoJug ? 'bot' : 'jugador';
 
-  const perdedorTexto = estadoPartida.perdedor === 'jugador' ? 'JUGADOR' : 'IA';
+  estadoPartida.perdedor = perdedor;
   
-  agregarMsj(`${estadoPartida.perdedor === 'jugador' ? 'IA' : 'Jugador'} gana. Perdió ${perdedorTexto}.`, 'alerta');
+  agregarMsj(`${ganador} gana la ronda. Perdió ${perdedor === 'jugador' ? 'JUGADOR' : 'IA'}.`, 'alerta');
 
   btnsPPT.classList.add('oculto'); // desaparecen los botones para momento ruleta
 
@@ -186,5 +187,13 @@ function terminarPartida(perdedor) {
   
   modal.classList.remove('oculto');
 }
+
+window.addEventListener('keyup', (e) => {
+  if (e.key.toLowerCase() === 'n') {
+    document.body.classList.toggle('modo-oscuro');
+    const estaActivo = document.body.classList.contains('modo-oscuro');
+    agregarMsj(`Modo Oscuro ${estaActivo ? 'ACTIVADO' : 'DESACTIVADO'}.`, 'info');
+  }
+});
 
 btnIniciar.addEventListener('click', iniciarJuego);
