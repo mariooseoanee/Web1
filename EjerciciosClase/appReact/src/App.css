@@ -215,3 +215,56 @@ h2 {
   color: var(--text-main);
   letter-spacing: 0.5px;
 }
+
+
+/* Aplausometro */
+.aplausometro {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  max-width: 300px;
+}
+
+.aplausometro .contador {
+  font-size: 1.1rem;
+}
+
+.aplausometro .mensaje {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin: 12px 0;
+}
+
+.aplausometro .acciones {
+  display: flex;
+  gap: 10px;
+}
+
+.aplausometro button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.aplausometro button:hover {
+  opacity: 0.9;
+}
+
+.aplausometro .btn-secundario {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.aplausometro .btn-secundario:hover {
+  color: var(--text-main);
+}

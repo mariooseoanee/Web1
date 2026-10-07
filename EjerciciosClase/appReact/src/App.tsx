@@ -2,6 +2,7 @@ import "./App.css";
 import FichaTripulante from "./components/FichaTripulante";
 import Esclusa from "./components/Esclusa";
 import Ranking from "./components/Ranking";
+import Aplausometro from "./components/Aplausometro";
 
 const RANKING = [
   { id: "a1", jugador: "NOVA", puntos: 9800 },
@@ -31,6 +32,9 @@ export default function App() {
 
       <h2>Ranking de Jugadores</h2>
       <Ranking puntuaciones={RANKING} />
+
+      <h1>Aplausometro</h1>
+      <Aplausometro/>
     </main>
   );
 }
