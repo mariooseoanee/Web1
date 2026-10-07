@@ -24,7 +24,6 @@ export default function App() {
 
       <h2>Estado de Esclusas</h2>
       <section className="esclusas">
-        {/* Renderiza tres: abierta con 2, cerrada con 0, abierta con 0 */}
         <Esclusa abierta={true} avisos={2} />
         <Esclusa abierta={false} avisos={0} />
         <Esclusa abierta={true} avisos={0} />
