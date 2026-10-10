@@ -1,4 +1,4 @@
-const API_URL = 'https://images-api.nasa.gov/search?q=space&media_type=image';
+const API_URL = 'https://science.nasa.gov/wp-json/wp/v2/apod-basic?per_page=15';
 
 export async function fetchNasaImages() {
     try {
@@ -10,7 +10,7 @@ export async function fetchNasaImages() {
         
         // API devuelve siempre JSON
         const data = await response.json();
-        return data.collection.items; // array de items
+        return data;
         
   } catch (error) {
         console.error('Error accediendo a NASA data:', error);

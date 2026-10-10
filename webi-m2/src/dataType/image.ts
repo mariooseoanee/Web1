@@ -4,10 +4,10 @@ cada item tiene un array data y un array links
 */
 
 export interface ImageAPI { // lo recibido en la response, lo mapeamos a esta interfaz
-  id: string;
+  id: number;
   title: string;
   date: string;
+  year: string;
   imageUrl: string;
   description: string;
-  keywords: string[];
 }
