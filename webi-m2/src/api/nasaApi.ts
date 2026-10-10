@@ -5,7 +5,7 @@ export async function fetchNasaImages() {
         const response = await fetch(API_URL);
         
         if (!response.ok) {
-            throw new Error('Error en la petición: ${response.status}');
+            throw new Error(`Error en la petición: ${response.status}`);
         }
         
         // API devuelve siempre JSON
