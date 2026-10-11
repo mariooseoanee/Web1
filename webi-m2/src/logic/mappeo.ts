@@ -13,13 +13,17 @@ export function processImgNasa(apiItems: any[]): ImageAPI[] {
 
             const [year, month, day] = item.date.split('-');
 
+            const textoLimpio = item.explanation 
+                ? item.explanation.replace(/<[^>]*>?/gm, '') 
+                : 'Sin descripción';
+
             return {
                 id: item.post_id,
                 title: item.title || 'Sin título',
                 date: `${day}/${month}/${year}`,
                 year: year,
                 imageUrl: item.hdurl || item.url,
-                description: item.explanation ? item.explanation.substring(0, 120) + '...' : 'Sin descripción'
+                description: textoLimpio.substring(0, 120) + '...'
             }
         })
 }
