@@ -7,7 +7,7 @@ export interface ImageAPI { // lo recibido en la response, lo mapeamos a esta in
   id: number;
   title: string;
   date: string;
-  year: string;
+  category: string;
   imageUrl: string;
   description: string;
 }

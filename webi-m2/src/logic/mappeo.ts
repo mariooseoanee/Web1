@@ -21,9 +21,48 @@ export function processImgNasa(apiItems: any[]): ImageAPI[] {
                 id: item.post_id,
                 title: item.title || 'Sin título',
                 date: `${day}/${month}/${year}`,
-                year: year,
+                category: getCategory(item.title || ''),
                 imageUrl: item.hdurl || item.url,
                 description: textoLimpio.substring(0, 120) + '...'
             }
         })
+}
+
+
+function getCategory(title: string): string {
+    const t = title.toLowerCase();
+
+    if (t.includes('galaxy') || t.includes('nebula') || t.includes('cluster') || 
+        t.includes('star') || t.includes('supernova') || t.includes('andromeda') || 
+        t.includes('universe')) {
+        return 'Deep Space';
+    }
+
+    if (t.includes('moon') || t.includes('mars') || t.includes('sun') || 
+        t.includes('earth') || t.includes('comet') || t.includes('lunar') || 
+        t.includes('saturn') || t.includes('crater') || t.includes('ridge') ||
+        t.includes('auroral')) {
+        return 'Solar System';
+    }
+
+    return 'Miscellaneous';
+}
+
+
+/* ejemplo del objeto a devolver
+{
+  "Solar System": [ {foto_luna}, {foto_marte} ],
+  "Miscellaneous": [ {foto_astronauta} ]
+}
+*/
+export function groupImagesByCategory(images: ImageAPI[]) {
+    return images.reduce((imagenesAgrupadas: Record<string, ImageAPI[]>, img) => {
+        
+        if (!imagenesAgrupadas[img.category]) {
+            imagenesAgrupadas[img.category] = [];
+        }
+        
+        imagenesAgrupadas[img.category].push(img);
+        return imagenesAgrupadas; 
+    }, {});
 }
