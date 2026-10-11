@@ -1,18 +1,19 @@
 import { fetchNasaImages } from './api/nasaApi.ts';
 import { processImgNasa } from './logic/mappeo.ts';
-import { renderGallery } from './render/dom';
-import './style.css';
+import { renderGallery, renderLoading, renderError } from './render/dom.ts';
 
 async function initApp() {
 
+    renderLoading();
     try {
         const response = await fetchNasaImages();
-        const dataFormatted = processImgNasa(response);
-
+        const dataFormatted = processImgNasa(response);        
 
         renderGallery(dataFormatted);
+        
     } catch (error) {
-        console.error('Error accediendo a NASA data:', error);
+        const errorMsg = error instanceof Error ? error.message : 'Error desconocido al contactar con la API.';
+        renderError(errorMsg);
     }
 }
 

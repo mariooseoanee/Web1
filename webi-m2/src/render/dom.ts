@@ -28,3 +28,24 @@ export function renderGallery(images: ImageAPI[]) {
         </section>
     `;
 }
+
+
+export function renderLoading() {
+  app.innerHTML = `
+    <div class="loading-state">
+      <p>🚀 Conectando con la base de datos de la NASA...</p>
+    </div>
+  `;
+}
+
+
+export function renderError(message: string) {
+  app.innerHTML = `
+    <div class="error-state">
+      <h2>❌ Fallo de Transmisión</h2>
+      <p>${message}</p>
+      <button onclick="location.reload();">Reintentar conexión</button>
+    </div>
+  `;
+}
+
