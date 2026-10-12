@@ -15,11 +15,11 @@ export function processImgNasa(apiItems: any[]): ImageAPI[] {
 
             const textoLimpio = item.explanation 
                 ? item.explanation.replace(/<[^>]*>?/gm, '') 
-                : 'Sin descripción';
+                : 'Without description';
 
             return {
                 id: item.post_id,
-                title: item.title || 'Sin título',
+                title: item.title || 'No title',
                 date: `${day}/${month}/${year}`,
                 category: getCategory(item.title || ''),
                 imageUrl: item.hdurl || item.url,

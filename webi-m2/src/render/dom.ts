@@ -44,7 +44,7 @@ export function renderError(message: string) {
     <div class="error-state">
       <h2>❌ Transmission Failure</h2>
       <p>${message}</p>
-      <button onclick="location.reload();">Retry connection</button>
+      <button onclick="localStorage.clear(); location.reload();">Retry connection</button>
     </div>
   `;
 }
