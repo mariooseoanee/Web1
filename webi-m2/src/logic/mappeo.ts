@@ -1,21 +1,22 @@
 import type { ImageAPI } from "../dataType/image.ts";
+import type { NasaApiItem } from '../dataType/image.ts';
 
 /*
 la API a veces devuelve elementos que no son fotos (como videos)
 el filtro los comprueba (si no son fotos lo saca del array)
 */
-export function processImgNasa(apiItems: any[]): ImageAPI[] {
+export function processImgNasa(apiItems: NasaApiItem[]): ImageAPI[] {
     return apiItems
         
-        .filter(item => item.media_type === 'image' && item.url) 
+        .filter(item => item.url && (!item.media_type || item.media_type === 'image'))
 
         .map(item => {
 
-            const [year, month, day] = item.date.split('-');
+            const dateParts = item.date ? item.date.split('-') : ['????', '??', '??'];
+            const [year, month, day] = dateParts;
 
-            const textoLimpio = item.explanation 
-                ? item.explanation.replace(/<[^>]*>?/gm, '') 
-                : 'Without description';
+            const cleanDesc = item.explanation ? item.explanation.replace(/<[^>]*>?/gm, '') : 'Without description';
+            const safeDesc = cleanDesc.length > 120 ? cleanDesc.substring(0, 120) + '...' : cleanDesc;
 
             return {
                 id: item.post_id,
@@ -23,7 +24,7 @@ export function processImgNasa(apiItems: any[]): ImageAPI[] {
                 date: `${day}/${month}/${year}`,
                 category: getCategory(item.title || ''),
                 imageUrl: item.hdurl || item.url,
-                description: textoLimpio.substring(0, 120) + '...'
+                description: safeDesc
             }
         })
 }

@@ -1,46 +1,36 @@
+import { getValidCache, saveToCache } from './cache.ts';
+import type { NasaApiItem } from '../dataType/image.ts';
+
 const API_URL = 'https://science.nasa.gov/wp-json/wp/v2/apod-basic?per_page=15';
-const CACHE_KEY = 'nasa_apod_cache';
 
 export async function fetchNasaImages() {
 
     try {
         
-        const cachedData = localStorage.getItem(CACHE_KEY);
-        const hoy = new Date().toDateString();
-
-        if (cachedData) {
-            const parsedCache = JSON.parse(cachedData);
-            
-            // se comprueba si es de hoy
-            if (parsedCache.date === hoy) {
-                console.log('cargando desde localStorage (caché válida de hoy)');
-                return parsedCache.data;
-            } else {
-                console.log('caché caducada, nueva img NASA disponible.');
-            }
+        const cached = getValidCache();
+        if (cached) {
+            return cached;
         }
 
-    
-        const response = await fetch(API_URL);
+        // AbortController para cancelar si tarda mas de 8 segundos
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+        const response = await fetch(API_URL, { signal: controller.signal });
+        clearTimeout(timeoutId);
         
         if (!response.ok) {
-            throw new Error(`Error on the response: ${response.status}`);
+            throw new Error('We couldn`t connect to the NASA servers. Please try again later.');
         }
         
-        // API devuelve siempre JSON
-        const data = await response.json();
 
         // guardado de los datos en localStorage (para no saturar peticiones, obj con data y fecha)
+        const data: NasaApiItem[] = await response.json();
         if (Array.isArray(data) && data.length > 0) {
-            
-            const cacheObject = {
-                date: hoy,
-                data: data
-            };
-            localStorage.setItem(CACHE_KEY, JSON.stringify(cacheObject));
+            saveToCache(data);
         }
-
-        return data;
+    
+    return data;
         
   } catch (error) {
         console.error('Error connecting to NASA data:', error);

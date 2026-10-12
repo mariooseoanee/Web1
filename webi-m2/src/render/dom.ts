@@ -10,21 +10,18 @@ export function renderGallery(images: ImageAPI[]) {
 
     const cardsHtml = images.map(img => `
         <article class="card">
-        <img src="${img.imageUrl}" alt="${img.title}" loading="lazy"/>
-        <div class="card-info">
-            <h3>${img.title}</h3>
-            <span class="date">${img.date} (${img.category})</span>
-            <p>${img.description}</p>
-        </div>
+            <img src="${img.imageUrl}" alt="${img.title}" loading="lazy"/>
+            <div class="card-info">
+                <h3>${img.title}</h3>
+                <span class="date">${img.date} • ${img.category}</span>
+                <p>${img.description}</p>
+            </div>
         </article>
     `).join('');
 
-
     app.innerHTML = `
         <section class="gallery-container">
-        <div class="gallery-track">
-            ${cardsHtml}
-        </div>
+            <div class="gallery-track">${cardsHtml}</div>
         </section>
     `;
 }
@@ -40,50 +37,33 @@ export function renderLoading() {
 
 
 export function renderError(message: string) {
-  app.innerHTML = `
-    <div class="error-state">
-      <h2>❌ Transmission Failure</h2>
-      <p>${message}</p>
-      <button onclick="localStorage.clear(); location.reload();">Retry connection</button>
-    </div>
-  `;
+    app.innerHTML = `
+        <div class="error-state">
+            <h2>❌ Transmission Failure</h2>
+            <p>${message}</p>
+            <button id="retry-btn">Retry connection</button>
+        </div>
+    `;
+
+    // Eliminamos el onclick inline[cite: 3]
+    document.getElementById('retry-btn')?.addEventListener('click', () => {
+        location.reload();
+    });
 }
 
 
-export function renderFilters(groupedImages: Record<string, ImageAPI[]>, allImages: ImageAPI[]) {
-
+export function renderFilters(categories: string[]) {
     let filterContainer = document.querySelector<HTMLDivElement>('#filters');
-
     if (!filterContainer) {
         filterContainer = document.createElement('div');
         filterContainer.id = 'filters';
         app.parentNode?.insertBefore(filterContainer, app);
     }
 
-    const categories = Object.keys(groupedImages);
-    
-    // generar botones con el atributo data-category
     const buttonsHtml = `
-        <button class="filter-btn active" data-category="all">All</button>
+        <button class="filter-btn active" data-category="todos">All</button>
         ${categories.map(cat => `<button class="filter-btn" data-category="${cat}">${cat}</button>`).join('')}
     `;
     
     filterContainer.innerHTML = buttonsHtml;
-
-    const buttons = filterContainer.querySelectorAll('.filter-btn');
-    buttons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            buttons.forEach(b => b.classList.remove('active'));
-            const target = e.target as HTMLButtonElement;
-            target.classList.add('active');
-
-            const selectedCategory = target.dataset.category;
-            if (selectedCategory === 'all') {
-                renderGallery(allImages);
-            } else if (selectedCategory) {
-                renderGallery(groupedImages[selectedCategory]);
-            }
-        });
-    });
 }
-
