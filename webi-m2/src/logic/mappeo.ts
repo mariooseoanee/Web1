@@ -30,23 +30,26 @@ export function processImgNasa(apiItems: NasaApiItem[]): ImageAPI[] {
 }
 
 
-function getCategory(title: string): string {
-    const t = title.toLowerCase();
+// mapa claro de Categoría -> Array de palabras clave
+const CATEGORY_MAP: Record<string, string[]> = {
+    'Deep Space': ['galaxy', 'nebula', 'cluster', 'star', 'supernova', 'andromeda', 'universe'],
+    'Solar System': ['moon', 'mars', 'sun', 'earth', 'comet', 'lunar', 'saturn', 'crater', 'ridge', 'auroral']
+};
 
-    if (t.includes('galaxy') || t.includes('nebula') || t.includes('cluster') || 
-        t.includes('star') || t.includes('supernova') || t.includes('andromeda') || 
-        t.includes('universe')) {
-        return 'Deep Space';
-    }
+export function getCategory(title: string): string {
+    const match = Object.entries(CATEGORY_MAP).find(([, keywords]) => {
+        
+        // some() evalúa comprueba si al menos una palabra clave del array se cumple
+        return keywords.some(keyword => {
+            // \b (Word Boundary) para exigir que sea una palabra aislada, 'i' ignora mayus y minus
+            const regex = new RegExp(`\\b${keyword}\\b`, 'i');
+            return regex.test(title);
+        });
+        
+    });
 
-    if (t.includes('moon') || t.includes('mars') || t.includes('sun') || 
-        t.includes('earth') || t.includes('comet') || t.includes('lunar') || 
-        t.includes('saturn') || t.includes('crater') || t.includes('ridge') ||
-        t.includes('auroral')) {
-        return 'Solar System';
-    }
-
-    return 'Miscellaneous';
+    // si no coincide, undefined
+    return match ? match[0] : 'Miscellaneous';
 }
 
 
