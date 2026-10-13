@@ -33,7 +33,7 @@ export function processImgNasa(apiItems: NasaApiItem[]): ImageAPI[] {
 // mapa de Categoría -> Array de palabras clave
 const CATEGORY_MAP_COMPILED = Object.entries({
     'Deep Space': ['galaxy', 'nebula', 'cluster', 'star', 'supernova', 'andromeda', 'universe'],
-    'Solar System': ['moon', 'mars', 'sun', 'earth', 'comet', 'lunar', 'saturn', 'crater', 'ridge', 'auroral']
+    'Solar System': ['moon', 'mars', 'sun', 'earth', 'comet', 'lunar', 'saturn', 'crater', 'ridge', 'auroral', 'jupiter']
 }).map(([category, keywords]) => ({
     category,
     regexes: keywords.map(kw => new RegExp(`\\b${kw}\\b`, 'i'))

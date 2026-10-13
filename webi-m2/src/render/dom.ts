@@ -13,9 +13,11 @@ export function setupAppStructure() {
 }
 
 export function renderGallery(images: ImageAPI[]) {
+    const container = document.getElementById('gallery-container');
+    if (!container) return;
+
     if (images.length === 0) {
-        const app = getApp();
-        app.innerHTML = `<p class="error-state">No stellar records found.</p>`;
+        container.innerHTML = `<p class="error-state">No stellar records found.</p>`;
         return;
     }
 
@@ -30,8 +32,7 @@ export function renderGallery(images: ImageAPI[]) {
         </article>
     `).join('');
 
-    const app = getApp();
-    app.innerHTML = `
+    container.innerHTML = `
         <section class="gallery-container">
             <div class="gallery-track">${cardsHtml}</div>
         </section>
@@ -65,19 +66,17 @@ export function renderError(message: string, onRetry: () => void) {
 
 
 export function renderFilters(categories: string[]) {
-    let filterContainer = document.querySelector<HTMLDivElement>('#filters');
-    const app = getApp();
-    if (!filterContainer) {
-        filterContainer = document.createElement('div');
-        filterContainer.id = 'filters';
-        app.parentNode?.insertBefore(filterContainer, app);
-    }
+    const container = document.getElementById('filters-container');
+    if (!container) return;
 
     const buttonsHtml = `
-        <button class="filter-btn active" data-category="todos">All</button>
-        ${categories.map(cat => `<button class="filter-btn" data-category="${escapeHTML(cat)}">${escapeHTML(cat)}</button>`).join('')}    `;
+        <div id="filters">
+            <button class="filter-btn active" data-category="todos">All</button>
+            ${categories.map(cat => `<button class="filter-btn" data-category="${escapeHTML(cat)}">${escapeHTML(cat)}</button>`).join('')}
+        </div>
+    `;
     
-    filterContainer.innerHTML = buttonsHtml;
+    container.innerHTML = buttonsHtml;
 }
 
 
