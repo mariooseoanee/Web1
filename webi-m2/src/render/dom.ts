@@ -1,24 +1,36 @@
 import type { ImageAPI } from "../dataType/image.ts";
 
-const app = document.querySelector<HTMLDivElement>('#app')!;
+function getApp() {
+    return document.querySelector<HTMLDivElement>('#app')!;
+}
+
+export function setupAppStructure() {
+    const app = getApp();
+    app.innerHTML = `
+        <div id="filters-container"></div>
+        <div id="gallery-container"></div>
+    `;
+}
 
 export function renderGallery(images: ImageAPI[]) {
     if (images.length === 0) {
+        const app = getApp();
         app.innerHTML = `<p class="error-state">No stellar records found.</p>`;
         return;
     }
 
     const cardsHtml = images.map(img => `
         <article class="card">
-            <img src="${img.imageUrl}" alt="${img.title}" loading="lazy"/>
+            <img src="${escapeHTML(img.imageUrl)}" alt="${escapeHTML(img.title)}" loading="lazy"/>
             <div class="card-info">
-                <h3>${img.title}</h3>
-                <span class="date">${img.date} • ${img.category}</span>
-                <p>${img.description}</p>
+                <h3>${escapeHTML(img.title)}</h3>
+                <span class="date">${escapeHTML(img.date)} • ${escapeHTML(img.category)}</span>
+                <p>${escapeHTML(img.description)}</p>
             </div>
         </article>
     `).join('');
 
+    const app = getApp();
     app.innerHTML = `
         <section class="gallery-container">
             <div class="gallery-track">${cardsHtml}</div>
@@ -28,32 +40,33 @@ export function renderGallery(images: ImageAPI[]) {
 
 
 export function renderLoading() {
-  app.innerHTML = `
-    <div class="loading-state">
-      <p>🚀 Connecting to NASA APOD API...</p>
-    </div>
-  `;
+    const app = getApp();
+    app.innerHTML = `
+        <div class="loading-state">
+        <p>🚀 Connecting to NASA APOD API...</p>
+        </div>
+    `;
 }
 
 
-export function renderError(message: string) {
+export function renderError(message: string, onRetry: () => void) {
+    const app = getApp();
     app.innerHTML = `
         <div class="error-state">
             <h2>❌ Transmission Failure</h2>
-            <p>${message}</p>
+            <p>${escapeHTML(message)}</p>
             <button id="retry-btn">Retry connection</button>
         </div>
     `;
 
-    // Eliminamos el onclick inline[cite: 3]
-    document.getElementById('retry-btn')?.addEventListener('click', () => {
-        location.reload();
-    });
+    // para no hacer un reload directamente le pasamos el initApp
+    document.getElementById('retry-btn')?.addEventListener('click', onRetry);
 }
 
 
 export function renderFilters(categories: string[]) {
     let filterContainer = document.querySelector<HTMLDivElement>('#filters');
+    const app = getApp();
     if (!filterContainer) {
         filterContainer = document.createElement('div');
         filterContainer.id = 'filters';
@@ -62,8 +75,15 @@ export function renderFilters(categories: string[]) {
 
     const buttonsHtml = `
         <button class="filter-btn active" data-category="todos">All</button>
-        ${categories.map(cat => `<button class="filter-btn" data-category="${cat}">${cat}</button>`).join('')}
-    `;
+        ${categories.map(cat => `<button class="filter-btn" data-category="${escapeHTML(cat)}">${escapeHTML(cat)}</button>`).join('')}    `;
     
     filterContainer.innerHTML = buttonsHtml;
+}
+
+
+// para evitar ataques XSS
+export function escapeHTML(str: string): string {
+    return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag as string] || tag));
 }

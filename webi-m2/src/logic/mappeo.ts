@@ -30,26 +30,18 @@ export function processImgNasa(apiItems: NasaApiItem[]): ImageAPI[] {
 }
 
 
-// mapa claro de Categoría -> Array de palabras clave
-const CATEGORY_MAP: Record<string, string[]> = {
+// mapa de Categoría -> Array de palabras clave
+const CATEGORY_MAP_COMPILED = Object.entries({
     'Deep Space': ['galaxy', 'nebula', 'cluster', 'star', 'supernova', 'andromeda', 'universe'],
     'Solar System': ['moon', 'mars', 'sun', 'earth', 'comet', 'lunar', 'saturn', 'crater', 'ridge', 'auroral']
-};
+}).map(([category, keywords]) => ({
+    category,
+    regexes: keywords.map(kw => new RegExp(`\\b${kw}\\b`, 'i'))
+}));
 
-export function getCategory(title: string): string {
-    const match = Object.entries(CATEGORY_MAP).find(([, keywords]) => {
-        
-        // some() evalúa comprueba si al menos una palabra clave del array se cumple
-        return keywords.some(keyword => {
-            // \b (Word Boundary) para exigir que sea una palabra aislada, 'i' ignora mayus y minus
-            const regex = new RegExp(`\\b${keyword}\\b`, 'i');
-            return regex.test(title);
-        });
-        
-    });
-
-    // si no coincide, undefined
-    return match ? match[0] : 'Miscellaneous';
+function getCategory(title: string): string {
+    const match = CATEGORY_MAP_COMPILED.find(({ regexes }) => regexes.some(r => r.test(title)));
+    return match ? match.category : 'Miscellaneous';
 }
 
 

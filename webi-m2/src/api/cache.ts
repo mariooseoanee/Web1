@@ -1,6 +1,8 @@
+import type { NasaApiItem } from "../dataType/image";
+
 const CACHE_KEY = 'nasa_apod_cache';
 
-export function getValidCache() {
+export function getValidCache(): NasaApiItem[] | null{
     try {
         const cachedData = localStorage.getItem(CACHE_KEY);
         if (!cachedData) return null;
@@ -9,7 +11,7 @@ export function getValidCache() {
         const hoy = new Date().toDateString();
 
         if (parsedCache.date === hoy) {
-            return parsedCache.data;
+            return parsedCache.data as NasaApiItem[];
         }
         return null;
     } catch (error) {
@@ -19,7 +21,7 @@ export function getValidCache() {
     }
 }
 
-export function saveToCache(data: any) {
+export function saveToCache(data: NasaApiItem[]) {
     const cacheObject = {
         date: new Date().toDateString(),
         data: data
