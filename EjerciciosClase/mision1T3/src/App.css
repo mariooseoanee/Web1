@@ -1,0 +1,232 @@
+:root {
+  --bg-base: #0b0f19; 
+  --bg-card: #151b2b; 
+  --border-color: #2a3441;
+  --text-main: #f8fafc; 
+  --text-muted: #94a3b8; 
+  --accent: #6366f1; 
+  --accent-hover: #818cf8;
+  --radius: 20px; /* Bordes más redondeados y amigables */
+}
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+
+/* Contenedor principal */
+.app-container {
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.app-header h1 {
+  font-size: 2.4rem;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+  text-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
+}
+
+/* Tarjeta del Quiz con brillo ambiente */
+.quiz-wrapper {
+  width: 100%;
+  background: var(--bg-card);
+  padding: 3rem;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.8), 
+    0 0 40px rgba(99, 102, 241, 0.08); /* Glow de fondo suave */
+  text-align: center; /* Fuerza el centrado global dentro de la tarjeta */
+}
+
+.quiz-contenedor h2.titulo {
+  font-size: 1.5rem;
+  margin-bottom: 2.5rem;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* --- BARRA DE PROGRESO NATIVA --- */
+.barra-progreso {
+  width: 100%;
+  height: 10px;
+  margin-bottom: 2rem;
+  border-radius: 10px;
+  
+  /* Reseteamos el estilo nativo del navegador */
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+}
+
+/* Fondo de la barra (Chrome/Safari/Edge) */
+.barra-progreso::-webkit-progress-bar {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+}
+
+/* Relleno de la barra (Chrome/Safari/Edge) */
+.barra-progreso::-webkit-progress-value {
+  background: linear-gradient(90deg, var(--accent) 0%, #a855f7 100%);
+  border-radius: 10px;
+  /* El transition funciona mejor aquí para el efecto fluido */
+  transition: width 0.3s ease; 
+}
+
+/* Relleno de la barra (Firefox) */
+.barra-progreso::-moz-progress-bar {
+  background: linear-gradient(90deg, var(--accent) 0%, #a855f7 100%);
+  border-radius: 10px;
+}
+
+/* Cuadrícula de opciones centradas */
+.opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* Un poco más de espacio para respirar */
+  margin-bottom: 2.5rem;
+}
+
+.btn-opcion {
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 18px 20px;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  text-align: center; /* Centra el texto de "useEffect", etc.[cite: 2] */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+/* Efecto hover: ahora crece desde el centro */
+.btn-opcion:not([disabled]):hover {
+  border-color: var(--accent);
+  background-color: rgba(99, 102, 241, 0.15);
+  transform: scale(1.02); /* Da una sensación 3D al interactuar */
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
+}
+
+.btn-opcion:disabled {
+  cursor: default;
+  opacity: 0.85;
+}
+
+/* Feedback de acierto (Verde oscuro) */
+.btn-opcion.correcta {
+  background-color: rgba(16, 185, 129, 0.2);
+  border-color: #10b981;
+  color: #10b981;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+}
+
+/* Feedback de fallo (Rojo oscuro) */
+.btn-opcion.incorrecta {
+  background-color: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* --- ZONA INFERIOR (Pregunta, Puntos y Racha) --- */
+.info-inferior {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Aplicamos negrita (600) a todos los textos de esta zona */
+.info-inferior p {
+  font-weight: 600; 
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.puntuacion-racha {
+  display: flex;
+  gap: 1.5rem;
+}
+
+/* Color especial para los puntos */
+.puntuacion-racha p {
+  color: var(--accent-hover);
+}
+
+/* Color especial fuego para la racha */
+.racha-actual {
+  color: #fb923c !important; 
+  text-shadow: 0 0 8px rgba(251, 146, 60, 0.3);
+}
+
+/* Pantalla de resultados */
+.pantalla-resultado {
+  text-align: center;
+  padding: 2rem 0;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.pantalla-resultado h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-main);
+  text-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+}
+
+.pantalla-resultado p {
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+  color: var(--text-muted);
+}
+
+.pantalla-resultado button {
+  margin-top: 2.5rem;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+  color: white;
+  border: none;
+  padding: 16px 36px;
+  border-radius: 30px; /* Botón de reinicio tipo píldora */
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+}
+
+.pantalla-resultado button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 25px rgba(99, 102, 241, 0.5);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
