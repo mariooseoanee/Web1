@@ -4,23 +4,29 @@ import ListaHabitos from './components/ListaHabitos';
 import PanelResumen from './components/PanelResumen';
 import './App.css';
 
-const HABITOS_INICIALES = [
+export interface Habito {
+  id: string;
+  nombre: string;
+  racha: number;
+  hechoHoy: boolean;
+}
+
+const HABITOS_INICIALES: Habito[] = [
   { id: '1', nombre: 'beber 2L de agua', racha: 5, hechoHoy: false },
   { id: '2', nombre: 'levantarme antes de las 7am', racha: 3, hechoHoy: true },
   { id: '3', nombre: 'ir al gimnasio', racha: 8, hechoHoy: false },
 ];
 
 export function AppHabitos() {
+  const [habitos, setHabitos] = useState<Habito[]>(HABITOS_INICIALES);
+  const [notificacion, setNotificacion] = useState<string>('');
 
-  const [habitos, setHabitos] = useState(HABITOS_INICIALES);
-  const [notificacion, setNotificacion] = useState('');
-
-  const mostrarAviso = (msg) => {
+  const mostrarAviso = (msg: string): void => {
     setNotificacion(msg);
     setTimeout(() => setNotificacion(''), 3000);
   };
 
-  const handleToggleHecho = (id) => {
+  const handleToggleHecho = (id: string): void => {
     setHabitos((prevHabitos) =>
       prevHabitos.map((habito) => {
         if (habito.id === id) {
@@ -36,18 +42,18 @@ export function AppHabitos() {
     );
   };
 
-  const handleAddHabito = (nombre) => {
-    const nuevo = {
+  const handleAddHabito = (nombre: string): void => {
+    const nuevo: Habito = {
       id: crypto.randomUUID(),
       nombre,
       racha: 0,
       hechoHoy: false,
     };
     setHabitos((prevHabitos) => [...prevHabitos, nuevo]);
-    mostrarAviso(`¡Hábito "${nombre}" forjado con éxito! 🔥`);
+    mostrarAviso(`Hábito "${nombre}" creado.`);
   };
 
-  const handleEliminarHabito = (id) => {
+  const handleEliminarHabito = (id: string): void => {
     const habitoEliminado = habitos.find((h) => h.id === id);
     setHabitos((prevHabitos) => prevHabitos.filter((h) => h.id !== id));
     if (habitoEliminado) {
@@ -55,7 +61,7 @@ export function AppHabitos() {
     }
   };
 
-  const handleNuevoDia = () => {
+  const handleNuevoDia = (): void => {
     setHabitos((prevHabitos) =>
       prevHabitos.map((habito) => ({
         ...habito,
