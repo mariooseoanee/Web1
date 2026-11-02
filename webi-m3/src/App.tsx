@@ -28,17 +28,22 @@ export default function App() {
             setImages(formatted);
             setLoading(false);
         } catch (err: any) {
-            const message = err instanceof Error ? err.message : 'Unknown error while connecting to the API.'; // personalizacion del mensaje de error
+            // si la peticion fue abortada por la limpieza del signal
+            if (signal?.aborted || err?.name === 'AbortError') return;
+
+            // personalizacion del mensaje de error
+            const message = err instanceof Error ? err.message : 'Unknown error while connecting to the API.';
             setError(message);
             setLoading(false);
         }
     }, []);
 
-    // se usa el useEffect para cargar datos cuando el componente se monta
+    // se usa el useEffect para cargar datos cuando el componente se monta (se monta, ejecuta la limpieza y lo vuelve a montar por el Strict Mode)
     useEffect(() => {
         const controller = new AbortController();
         loadImages(controller.signal);
 
+        // funcion de limpieza que se ejecuta antes de volver a lanzar el effect y cuando el componente se desmonta
         return () => {
             controller.abort();
         };
