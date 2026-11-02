@@ -13,7 +13,7 @@ export async function fetchNasaImages(signal?: AbortSignal): Promise<NasaApiItem
         const response = await fetch(API_URL, { signal });
 
         if (!response.ok) {
-            throw new Error('No se pudo conectar con los servidores de la NASA. Inténtalo más tarde.');
+            throw new Error('Failed to connect to NASA servers. Please try again later.');
         }
 
         const data = await response.json();
@@ -27,7 +27,7 @@ export async function fetchNasaImages(signal?: AbortSignal): Promise<NasaApiItem
         if (error.name === 'AbortError') {
             throw error;
         }
-        console.error('Error al obtener datos de la NASA:', error);
+        console.error('Error fetching NASA images:', error);
         throw error;
     }
 }

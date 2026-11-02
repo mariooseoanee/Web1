@@ -1,7 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import type { ImageAPI } from './types/apod';
-import { fetchNasaImages } from './services/nasaApi';
-import { processImgNasa } from './services/formatters';
+import { useNasaImages } from './hooks/useNasaImages';
 import { Header } from './components/Header';
 import { FilterBar } from './components/FilterBar';
 import { Gallery } from './components/Gallery';
@@ -11,45 +10,12 @@ import { CardDetail } from './components/CardDetail';
 import './App.css';
 
 export default function App() {
-    const [images, setImages] = useState<ImageAPI[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    // hook personalizado para separar la lógica de conexión con la API, estados y efectos
+    const { images, loading, error, reload } = useNasaImages();
     const [selectedCategory, setSelectedCategory] = useState<string>('all'); // por defecto all
     const [selectedImage, setSelectedImage] = useState<ImageAPI | null>(null);
 
-    // se memoriza el callback de cargar datos, y se le pasa el signal como parametro para 
-    const loadImages = useCallback(async (signal?: AbortSignal) => {
-        setLoading(true);
-        setError(null);
-
-        try {
-            const rawItems = await fetchNasaImages(signal);
-            const formatted = processImgNasa(rawItems);
-            setImages(formatted);
-            setLoading(false);
-        } catch (err: any) {
-            // si la peticion fue abortada por la limpieza del signal
-            if (signal?.aborted || err?.name === 'AbortError') return;
-
-            // personalizacion del mensaje de error
-            const message = err instanceof Error ? err.message : 'Unknown error while connecting to the API.';
-            setError(message);
-            setLoading(false);
-        }
-    }, []);
-
-    // se usa el useEffect para cargar datos cuando el componente se monta (se monta, ejecuta la limpieza y lo vuelve a montar por el Strict Mode)
-    useEffect(() => {
-        const controller = new AbortController();
-        loadImages(controller.signal);
-
-        // funcion de limpieza que se ejecuta antes de volver a lanzar el effect y cuando el componente se desmonta
-        return () => {
-            controller.abort();
-        };
-    }, [loadImages]);
-
-    // se crean los arrays categories y filteredImages a partir de images
+    // se crean los arrays categories y filteredImages a partir de images (valores derivados en render)
     const categories = Array.from(new Set(images.map((img) => img.category)));
     const filteredImages = selectedCategory === 'all'
         ? images
@@ -68,7 +34,7 @@ export default function App() {
         return (
             <div className="app-layout">
                 <Header />
-                <ErrorState message={error} onRetry={() => loadImages()} />
+                <ErrorState message={error} onRetry={reload} />
             </div>
         );
     }
