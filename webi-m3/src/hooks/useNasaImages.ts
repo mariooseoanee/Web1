@@ -10,11 +10,7 @@ interface UseNasaImagesResult {
     reload: () => void;
 }
 
-/**
- * Custom Hook para gestionar la carga de imágenes astronómicas de la NASA.
- * Encapsula el estado de carga, errores, sincronización mediante useEffect
- * y la función de limpieza (cleanup) con AbortController.
- */
+// hook personalizado para que la carga de datos sea reutilizable para todos los componentes que los necesiten
 export function useNasaImages(): UseNasaImagesResult {
     const [images, setImages] = useState<ImageAPI[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
