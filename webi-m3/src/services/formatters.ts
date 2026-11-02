@@ -37,7 +37,7 @@ export function processImgNasa(apiItems: NasaApiItem[]): ImageAPI[] {
                 title: item.title || 'Untitled',
                 date: `${day}/${month}/${year}`,
                 category: getCategory(item.title || ''),
-                imageUrl: item.url,
+                imageUrl: imageAsset,
                 hdUrl: imageAsset,
                 description: shortDesc,
                 fullDescription: fullDesc
