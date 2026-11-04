@@ -1,0 +1,31 @@
+/* VARIABLES GLOBALES */
+:root {
+  --primary: #6366f1;
+
+  --bg-claro: #f3f4f6;
+  --card-claro: #ffffff;
+  --text-claro: #1f2937;
+  --border-claro: #e5e7eb;
+
+  --bg-oscuro: #0f172a;
+  --card-oscuro: #1e293b;
+  --text-oscuro: #f8fafc;
+  --border-oscuro: #334155;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  /* Transición suave al cambiar de tema en el body */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.claro {
+  background-color: var(--bg-claro);
+  color: var(--text-claro);
+}
+
+body.oscuro {
+  background-color: var(--bg-oscuro);
+  color: var(--text-oscuro);
+}

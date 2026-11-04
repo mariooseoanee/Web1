@@ -1,0 +1,125 @@
+/* CONTENEDOR PRINCIPAL */
+.app-nebula {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* CABECERA */
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid;
+}
+
+.cabecera.claro {
+  border-color: var(--border-claro);
+}
+
+.cabecera.oscuro {
+  border-color: var(--border-oscuro);
+}
+
+.btn-tema {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* FILTROS Y CONTROLES */
+.filtros {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.filtros input[type="text"],
+.filtros select {
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid gray;
+  background: transparent;
+  color: inherit;
+}
+
+.checkbox-favs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+/* REJILLA Y TARJETAS */
+.rejilla-peliculas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.tarjeta {
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.tarjeta:hover {
+  transform: translateY(-5px);
+}
+
+.tarjeta.claro {
+  background: var(--card-claro);
+  border: 1px solid var(--border-claro);
+}
+
+.tarjeta.oscuro {
+  background: var(--card-oscuro);
+  border: 1px solid var(--border-oscuro);
+}
+
+.portada {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.genero {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-top: -10px;
+}
+
+.detalles {
+  display: flex;
+  justify-content: space-around;
+  margin: 1rem 0;
+  font-weight: bold;
+}
+
+.btn-fav {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid gray;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.btn-fav.activa {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.sin-resultados {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 3rem;
+}
