@@ -1,0 +1,150 @@
+/* --- CONTENEDOR PRINCIPAL (App.tsx) --- */
+.app-main {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+/* --- TARJETA DEL FORMULARIO --- */
+.formulario-contenedor {
+  background-color: var(--superficie);
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 500px;
+}
+
+.formulario-contenedor h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--primario);
+  font-size: 1.75rem;
+}
+
+/* --- MENSAJES DE ESTADO --- */
+.alerta-exito {
+  background-color: var(--exito-fondo);
+  color: var(--exito-texto);
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  border: 1px solid #10b981;
+}
+
+.error {
+  color: var(--error);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* --- ESTRUCTURA DE CAMPOS --- */
+.campo {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.campo label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--texto-principal);
+  font-size: 0.95rem;
+}
+
+/* --- INPUTS Y SELECTS --- */
+input[type="text"],
+input[type="email"],
+input[type="url"],
+select {
+  padding: 0.75rem;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: #f9fafb;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+select:focus {
+  outline: none;
+  border-color: var(--borde-foco);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  background-color: var(--superficie);
+}
+
+/* --- RADIO Y CHECKBOXES --- */
+.opciones-radio,
+.opciones-checkbox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: #f9fafb;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--borde);
+}
+
+.opciones-radio label,
+.opciones-checkbox label,
+.checkbox-legal {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: normal;
+  margin-bottom: 0;
+  cursor: pointer;
+  color: var(--texto-secundario);
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  accent-color: var(--primario);
+  width: 1.1rem;
+  height: 1.1rem;
+  cursor: pointer;
+}
+
+/* --- EXTRAS DEL CAMPO --- */
+.contador {
+  text-align: right;
+  font-size: 0.8rem;
+  color: var(--texto-secundario);
+  margin-top: 0.25rem;
+}
+
+/* --- BOTÓN SUBMIT --- */
+button[type="submit"] {
+  width: 100%;
+  padding: 0.875rem;
+  background-color: var(--primario);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  margin-top: 1rem;
+}
+
+button[type="submit"]:hover:not(:disabled) {
+  background-color: var(--primario-hover);
+}
+
+button[type="submit"]:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+button[type="submit"]:disabled {
+  background-color: var(--borde);
+  cursor: not-allowed;
+  opacity: 0.7;
+}

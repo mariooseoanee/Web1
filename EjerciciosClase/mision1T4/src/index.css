@@ -1,0 +1,29 @@
+/* --- VARIABLES GLOBALES --- */
+:root {
+  --primario: #4f46e5;
+  --primario-hover: #4338ca;
+  --fondo: #f3f4f6;
+  --superficie: #ffffff;
+  --texto-principal: #1f2937;
+  --texto-secundario: #4b5563;
+  --borde: #d1d5db;
+  --borde-foco: #818cf8;
+  --error: #ef4444;
+  --exito-fondo: #d1fae5;
+  --exito-texto: #065f46;
+}
+
+/* --- RESETEO BÁSICO --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--fondo);
+  color: var(--texto-principal);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
