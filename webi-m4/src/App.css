@@ -1,0 +1,284 @@
+/* ==========================================================================
+   LAYOUT PRINCIPAL
+   ========================================================================== */
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   CABECERA
+   ========================================================================== */
+.app-header {
+  background: linear-gradient(180deg, #111827 0%, rgba(17, 24, 39, 0.8) 100%);
+  border-bottom: 1px solid var(--color-border);
+  padding: 1.25rem 2rem;
+  backdrop-filter: blur(8px);
+}
+
+.header-contenedor {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.header-marca {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo-icono {
+  font-size: 2.2rem;
+  background: var(--color-bg-card);
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.subtitulo {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-primary);
+  text-transform: uppercase;
+}
+
+.titulo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+/* ==========================================================================
+   SECCIÓN FORMULARIO
+   ========================================================================== */
+.seccion-formulario {
+  max-width: 900px;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.formulario-cabecera {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 1rem;
+}
+
+.insignia-modulo {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-primary);
+  margin-bottom: 0.3rem;
+}
+
+.titulo-seccion {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.4rem;
+}
+
+.descripcion-seccion {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   ESTRUCTURA Y CAMPOS DEL FORMULARIO
+   ========================================================================== */
+.formulario-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.grid-dos-columnas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .grid-dos-columnas {
+    grid-template-columns: 1fr;
+  }
+}
+
+.campo-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.campo-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.campo-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.campo-contador {
+  font-size: 0.75rem;
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+}
+
+.campo-input,
+.campo-select {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: #fff;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.campo-input:focus,
+.campo-select:focus {
+  border-color: var(--color-border-focus);
+  background-color: #172033;
+}
+
+.campo-input.input-invalido,
+.campo-select.input-invalido {
+  border-color: var(--color-danger-border);
+  background-color: rgba(239, 68, 68, 0.05);
+}
+
+.campo-ayuda {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.error-mensaje {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #f87171;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.error-mensaje::before {
+  content: "⚠";
+  font-size: 0.9em;
+}
+
+/* ==========================================================================
+   GRUPO DE BOTONES (RADIO)
+   ========================================================================== */
+.grupo-fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  background-color: rgba(31, 41, 55, 0.4);
+}
+
+.grupo-fieldset.grupo-con-error {
+  border-color: var(--color-danger-border);
+}
+
+.grupo-legend {
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0 0.5rem;
+  color: var(--color-text-main);
+}
+
+.grupo-ayuda {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.grupo-radio-opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-top: 0.5rem;
+}
+
+.opcion-radio-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-card);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.opcion-radio-label:hover {
+  background: var(--color-bg-subtle);
+}
+
+.opcion-radio-input {
+  margin-top: 0.25rem;
+  accent-color: var(--color-primary);
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.opcion-radio-contenido {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.opcion-radio-titulo {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.opcion-radio-descripcion {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   BOTÓN DE ENVÍO Y ACCIONES
+   ========================================================================== */
+.acciones-formulario {
+  margin-top: 0.5rem;
+}
+
+.boton-primario {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.5rem;
+  background: linear-gradient(180deg, #ffca7d 0%, #f6c845 100%);
+  color: #fff;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 4px rgba(2, 132, 199, 0.3);
+  transition: all 0.2s ease;
+}
+
+.boton-primario:hover {
+  background: linear-gradient(180deg, #f8ae38 0%, #e6a134 100%);
+  box-shadow: 0 4px 12px rgba(248, 174, 56, 0.4);
+}
