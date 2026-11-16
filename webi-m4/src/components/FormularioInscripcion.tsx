@@ -1,31 +1,36 @@
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+
 import {
-    esquemaInscripcionEquipo, DEPORTES, ETIQUETAS_DEPORTES, CATEGORIAS, ETIQUETAS_CATEGORIAS, MINIMO_JUGADORES,
-    type EntradaInscripcion, type DatosInscripcion, type Deporte
+    esquemaInscripcionEquipo, DEPORTES, ETIQUETAS_DEPORTES, CATEGORIAS, ETIQUETAS_CATEGORIAS, MINIMO_JUGADORES, type DatosInscripcion, type Deporte
 } from "../esquemas/esquema";
+
+import { inscribirEquipo } from "../services/equipoService";
 
 import CampoTexto from "./CampoTexto";
 import CampoSelect from "./CampoSelect";
 import GrupoRadio from "./GrupoBotones";
+import CheckboxLegal from "./CheckboxLegal";
 
 export default function FormularioInscripcion() {
+    const queryClient = useQueryClient();
+    const [mensajeExito, setMensajeExito] = useState<string | null>(null);
 
     // React Hook Form con ZodResolver (Única fuente de verdad de la validación)
-    const { register, control, formState: { errors } }
-        = useForm<EntradaInscripcion, unknown, DatosInscripcion>({
-
-            resolver: zodResolver(esquemaInscripcionEquipo),
-            defaultValues: {
-                nombreEquipo: "",
-                emailCapitan: "",
-                telefonoCapitan: "",
-                deporte: undefined,
-                categoria: "mixta",
-                numeroJugadores: "" as unknown as number,
-                aceptaReglamento: undefined,
-            },
-        });
+    const { register, reset, handleSubmit, control, formState: { errors } } = useForm({
+        resolver: zodResolver(esquemaInscripcionEquipo),
+        defaultValues: {
+            nombreEquipo: "",
+            emailCapitan: "",
+            telefonoCapitan: "",
+            deporte: undefined,
+            categoria: "mixta",
+            numeroJugadores: "",
+            aceptaReglamento: undefined,
+        },
+    });
 
 
     // useWatch para consultar el deporte elegido y mostrar la ayuda interactiva de mínimos
@@ -43,7 +48,26 @@ export default function FormularioInscripcion() {
         etiqueta: ETIQUETAS_CATEGORIAS[cat],
     }));
 
+    const onSubmit = (datos: DatosInscripcion) => {
+        setMensajeExito(null);
+        mutacion.mutate(datos);
+    };
 
+
+    // TanStack Query v5: Mutation para crear el registro e invalidar la query
+    const mutacion = useMutation({
+        mutationFn: inscribirEquipo,
+        onSuccess: (equipoCreado) => {
+            // 1. Limpiamos los campos del formulario
+            reset();
+            // 2. Notificación accesible de éxito (role="status")
+            setMensajeExito(
+                `¡Equipo "${equipoCreado.nombreEquipo}" inscrito con éxito en la modalidad de ${ETIQUETAS_DEPORTES[equipoCreado.deporte]}!`
+            );
+            // 3. Invalidamos la caché de TanStack Query para refrescar la lista remota
+            queryClient.invalidateQueries({ queryKey: ["equipos"] });
+        },
+    });
 
 
     return (
@@ -59,8 +83,8 @@ export default function FormularioInscripcion() {
                 </p>
             </div>
 
-
             <form
+                onSubmit={handleSubmit(onSubmit)}
                 noValidate
                 className="formulario-grid"
             >
@@ -129,14 +153,54 @@ export default function FormularioInscripcion() {
                     error={errors.categoria}
                 />
 
+                <CheckboxLegal
+                    id="aceptaReglamento"
+                    registro={register("aceptaReglamento")}
+                    texto="He leído y acepto el reglamento de competición deportiva universitaria y confirmo que todos los integrantes son alumnos matriculados."
+                    enlaceTexto="[Normativa Liga 2026]"
+                    error={errors.aceptaReglamento}
+                />
+
                 <div className="acciones-formulario">
                     <button
+                        disabled={mutacion.isPending}
+
                         type="submit"
                         className="boton-primario"
                     >
                         Inscribir Equipo en la Liga
                     </button>
                 </div>
+
+                {mensajeExito && (
+                    <div role="status" className="alerta-banner alerta-exito">
+                        <span className="icono-alerta" aria-hidden="true">✓</span>
+                        <div className="alerta-cuerpo">
+                            <strong>Inscripción confirmada:</strong>
+                            <p>{mensajeExito}</p>
+                        </div>
+                        <button
+                            type="button"
+                            className="boton-cerrar-alerta"
+                            onClick={() => setMensajeExito(null)}
+                            aria-label="Cerrar confirmación"
+                        >
+                            ×
+                        </button>
+                    </div>
+                )}
+
+                {/* Feedback accesible de error: role="alert" */}
+                {mutacion.isError && (
+                    <div role="alert" className="alerta-banner alerta-error">
+                        <span className="icono-alerta" aria-hidden="true">⚠</span>
+                        <div className="alerta-cuerpo">
+                            <strong>No se pudo completar la inscripción:</strong>
+                            <p>{mutacion.error.message}</p>
+                        </div>
+                    </div>
+                )}
+
             </form>
         </section>
     );

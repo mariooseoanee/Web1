@@ -67,3 +67,21 @@ export const esquemaInscripcionEquipo = z
 
 export type EntradaInscripcion = z.input<typeof esquemaInscripcionEquipo>;
 export type DatosInscripcion = z.output<typeof esquemaInscripcionEquipo>;
+
+
+
+// se define una nuevo esquema para validar los equipos que vienen del servidor (sin datos corruptos)
+export const esquemaEquipoServidor = z.object({
+    id: z.string().min(1, "El identificador del equipo es obligatorio"),
+    nombreEquipo: z.string().min(1, "Nombre de equipo inválido"),
+    emailCapitan: z.email("El email del capitán en el servidor no es válido"),
+    telefonoCapitan: z.string().min(1, "Teléfono obligatorio"),
+    deporte: z.enum(DEPORTES, {
+        message: "Deporte no reconocido en la competición",
+    }),
+    categoria: z.enum(CATEGORIAS),
+    numeroJugadores: z.number().int().min(2),
+    fechaInscripcion: z.string().min(1),
+});
+
+export type EquipoServidor = z.infer<typeof esquemaEquipoServidor>;
