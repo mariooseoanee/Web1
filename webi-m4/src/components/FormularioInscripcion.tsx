@@ -136,7 +136,7 @@ export default function FormularioInscripcion() {
                         error={errors.numeroJugadores}
                         ayuda={
                             minimoActual
-                                ? `ℹ Requisito para este deporte: mínimo ${minimoActual} personas.`
+                                ? `* Requisito para este deporte: mínimo ${minimoActual} personas.`
                                 : "Indica el número total de integrantes."
                         }
                     />

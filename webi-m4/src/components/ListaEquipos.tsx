@@ -5,6 +5,8 @@ import type { Deporte } from "../types/equipo";
 
 import FiltrosEquipos from "./FiltrosEquipos";
 import TarjetaEquipo from "./TarjetaEquipo";
+import EstadoCarga from "./EstadoCarga";
+import EstadoError from "./EstadoError";
 
 export default function ListaEquipos() {
     const queryClient = useQueryClient();
@@ -13,20 +15,24 @@ export default function ListaEquipos() {
     const [eliminandoId, setEliminandoId] = useState<string | null>(null);
 
     // useQuery para obtener la lista de equipos inscritos
-    const { data: equipos, isPending, isFetching } = useQuery({
-        queryKey: [
-            "equipos",
-            {
-                busqueda: busqueda.trim(),
-                deporte: filtroDeporte,
-            },
-        ],
-        queryFn: () =>
-            obtenerEquipos({
-                busqueda,
-                deporte: filtroDeporte,
-            }),
-    });
+    const { data: equipos,
+        isPending,
+        isError,
+        error,
+        isFetching } = useQuery({
+            queryKey: [
+                "equipos",
+                {
+                    busqueda: busqueda.trim(),
+                    deporte: filtroDeporte,
+                },
+            ],
+            queryFn: () =>
+                obtenerEquipos({ // devuelve una promesa que se resuelve o se rechaza, si se rechaza, el error se pone en true
+                    busqueda,
+                    deporte: filtroDeporte,
+                }),
+        });
 
     // mutation para cancelar la inscripción 
     // (todas las operaciones que modifican se hacen con mutations)
@@ -46,6 +52,10 @@ export default function ListaEquipos() {
     const handleCancelar = (id: string) => {
         mutacionCancelar.mutate(id);
     };
+
+    const esErrorBonusZod = Boolean(
+        error?.message.includes("BONUS ZOD safeParse")
+    );
 
     return (
         <section className="seccion-lista" aria-labelledby="titulo-directorio">
@@ -80,6 +90,17 @@ export default function ListaEquipos() {
                 }}
             />
 
+            {/* estado de carga */}
+            {isPending && <EstadoCarga />}
+
+            {/* estado de error */}
+            {isError && (
+                <EstadoError
+                    mensaje={error.message}
+                    esErrorBonusZod={esErrorBonusZod}
+                />
+            )}
+
             {/* solo si se encuentran equipos se muestra */}
             {equipos && !isPending && (
                 <>
@@ -90,30 +111,32 @@ export default function ListaEquipos() {
                         </span>
                     </div>
 
-                    {equipos.length === 0 ? ( // si no se encuentran equipos se muestra el estado vacio
-                        <div className="estado-vacio" role="status">
-                            <span className="icono-vacio" aria-hidden="true">⚽</span>
-                            <h3>No hay equipos que mostrar</h3>
-                            <p>
-                                {busqueda || filtroDeporte !== "todos"
-                                    ? "No se han encontrado equipos con el filtro seleccionado."
-                                    : "Todavía no se ha inscrito ningún equipo en el campeonato."}
-                            </p>
-                        </div>
-                    ) : (
-                        <div className="grid-tarjetas" role="list">
-                            {equipos.map((equipo) => (
-                                <TarjetaEquipo
-                                    key={equipo.id}
-                                    equipo={equipo}
-                                    estaCancelando={
-                                        eliminandoId === equipo.id || mutacionCancelar.isPending
-                                    }
-                                    onCancelar={handleCancelar}
-                                />
-                            ))}
-                        </div>
-                    )}
+                    {equipos.length === 0 ?
+
+                        ( // si no se encuentran equipos se muestra el estado vacio 
+                            <div className="estado-vacio" role="status">
+                                <span className="icono-vacio" aria-hidden="true">⚽</span>
+                                <h3>No hay equipos que mostrar</h3>
+                                <p>
+                                    {busqueda || filtroDeporte !== "todos"
+                                        ? "No se han encontrado equipos con el filtro seleccionado."
+                                        : "Todavía no se ha inscrito ningún equipo en el campeonato."}
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="grid-tarjetas" role="list">
+                                {equipos.map((equipo) => (
+                                    <TarjetaEquipo
+                                        key={equipo.id}
+                                        equipo={equipo}
+                                        estaCancelando={
+                                            eliminandoId === equipo.id || mutacionCancelar.isPending
+                                        }
+                                        onCancelar={handleCancelar}
+                                    />
+                                ))}
+                            </div>
+                        )}
                 </>
             )}
         </section>

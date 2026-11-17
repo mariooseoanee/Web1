@@ -85,3 +85,4 @@ export const esquemaEquipoServidor = z.object({
 });
 
 export type EquipoServidor = z.infer<typeof esquemaEquipoServidor>;
+export const esquemaListaEquiposServidor = z.array(esquemaEquipoServidor);

@@ -1,4 +1,4 @@
-import { type DatosInscripcion, type EquipoServidor } from "../esquemas/esquema";
+import { type DatosInscripcion, type EquipoServidor, esquemaListaEquiposServidor } from "../esquemas/esquema";
 import type { FiltrosEquipos } from "../types/equipo";
 
 
@@ -7,6 +7,8 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 // no solo hago la peticion a la API que es simulada y siempre responde bien, sino que tambien guardo los datos en cache
 const STORAGE_KEY = "db_equipos";
+// key para demostrar que se atrapa el dato corrupto
+const STORAGE_KEY_CORRUPTO = "db_equipos_corruptos";
 
 
 function leerEquiposCache(): EquipoServidor[] {
@@ -20,6 +22,15 @@ function leerEquiposCache(): EquipoServidor[] {
 
 function guardarEquiposCache(lista: EquipoServidor[]): void {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
+}
+
+// para que el dato corrupto no se guarde en cache de los datos validos
+export function estaCorrupcionActivada(): boolean {
+    return localStorage.getItem(STORAGE_KEY_CORRUPTO) === "true";
+}
+
+export function setCorrupcionActivada(activar: boolean): void {
+    localStorage.setItem(STORAGE_KEY_CORRUPTO, activar ? "true" : "false");
 }
 
 // inscribir a un equipo (POST)
@@ -92,9 +103,40 @@ export async function obtenerEquipos(filtros?: FiltrosEquipos): Promise<EquipoSe
     // Consumimos la respuesta JSON del servidor
     await respuesta.json();
 
-    let listaValida = leerEquiposCache();
+    let listaEquipos: unknown[] = leerEquiposCache();
 
-    // Filtrado reactivo en cliente
+    if (estaCorrupcionActivada()) {
+        listaEquipos = [ // metemos a la lista un objeto corrupto
+            {
+                id: "", // falla .min(1) 
+                nombreEquipo: "Equipo Corrupto API",
+                emailCapitan: "correo-invalido", // falla .email()
+                telefonoCapitan: "123",
+                deporte: "Badminton", // falla z.enum(DEPORTES)
+                categoria: "mixta",
+                numeroJugadores: "3 o 4", // falla z.number()
+                fechaInscripcion: "ayer",
+            },
+            ...listaEquipos,
+        ];
+    }
+
+    // BONUS validación estricta con safeParse en la queryFn
+    const parseo = esquemaListaEquiposServidor.safeParse(listaEquipos);
+
+    // si el parseo falla, lanzamos error con los detalles de los errores 
+    if (!parseo.success) {
+        const detalleErrores = parseo.error.issues
+            .map((i) => `[${i.path.join(".") || "registro"}]: ${i.message}`)
+            .join(" | ");
+
+        // con el throw dentro de la funcion async, se rechaza la promesa y luego TanStackQuery detecta el throw y pone isError en true
+        throw new Error(`[BONUS_ZOD]${detalleErrores}`);
+    }
+
+    let listaValida = parseo.data;
+
+    // filtrado reactivo en cliente
     if (filtros) {
         const { busqueda, deporte } = filtros;
         if (busqueda && busqueda.trim() !== "") {
