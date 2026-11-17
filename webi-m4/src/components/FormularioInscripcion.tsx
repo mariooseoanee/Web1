@@ -18,7 +18,7 @@ export default function FormularioInscripcion() {
     const queryClient = useQueryClient();
     const [mensajeExito, setMensajeExito] = useState<string | null>(null);
 
-    // React Hook Form con ZodResolver (Única fuente de verdad de la validación)
+    // React Hook Form con ZodResolver, gestiona el estado del formulario y la validación
     const { register, reset, handleSubmit, control, formState: { errors } } = useForm({
         resolver: zodResolver(esquemaInscripcionEquipo),
         defaultValues: {
@@ -54,17 +54,14 @@ export default function FormularioInscripcion() {
     };
 
 
-    // TanStack Query v5: Mutation para crear el registro e invalidar la query
+    // mutation para crear el registro e invalidar la query
     const mutacion = useMutation({
         mutationFn: inscribirEquipo,
         onSuccess: (equipoCreado) => {
-            // 1. Limpiamos los campos del formulario
             reset();
-            // 2. Notificación accesible de éxito (role="status")
             setMensajeExito(
                 `¡Equipo "${equipoCreado.nombreEquipo}" inscrito con éxito en la modalidad de ${ETIQUETAS_DEPORTES[equipoCreado.deporte]}!`
             );
-            // 3. Invalidamos la caché de TanStack Query para refrescar la lista remota
             queryClient.invalidateQueries({ queryKey: ["equipos"] });
         },
     });

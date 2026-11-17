@@ -1,4 +1,6 @@
 import { type DatosInscripcion, type EquipoServidor } from "../esquemas/esquema";
+import type { FiltrosEquipos } from "../types/equipo";
+
 
 // URL en .env
 const API_URL = import.meta.env.VITE_API_URL;
@@ -20,12 +22,7 @@ function guardarEquiposCache(lista: EquipoServidor[]): void {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
 }
 
-/**
- * SERVICIO: Inscribir equipo en la competición (POST)
- * 1. Hace petición HTTP REAL con POST a ${API_URL}/posts con body JSON.
- * 2. Comprueba response.ok y código HTTP 201.
- * 3. Devuelve el equipo validado.
- */
+// inscribir a un equipo (POST)
 export async function inscribirEquipo(datos: DatosInscripcion): Promise<EquipoServidor> {
     const listaActual: EquipoServidor[] = leerEquiposCache();
 
@@ -48,7 +45,7 @@ export async function inscribirEquipo(datos: DatosInscripcion): Promise<EquipoSe
         fechaInscripcion: new Date().toISOString()
     };
 
-    // Petición HTTP REAL POST a la API remota
+
     const respuesta = await fetch(`${API_URL}/posts`, {
         method: "POST",
         headers: {
@@ -75,4 +72,64 @@ export async function inscribirEquipo(datos: DatosInscripcion): Promise<EquipoSe
     guardarEquiposCache(nuevaLista);
 
     return nuevoEquipo;
+}
+
+
+// pedir el listado de equipos (GET)
+export async function obtenerEquipos(filtros?: FiltrosEquipos): Promise<EquipoServidor[]> {
+    const respuesta = await fetch(`${API_URL}/posts?_limit=4`, {
+        headers: {
+            Accept: "application/json",
+        },
+    });
+
+    if (!respuesta.ok) {
+        throw new Error(
+            `Error HTTP ${respuesta.status} (${respuesta.statusText}): Fallo al consultar el servidor de la liga`
+        );
+    }
+
+    // Consumimos la respuesta JSON del servidor
+    await respuesta.json();
+
+    let listaValida = leerEquiposCache();
+
+    // Filtrado reactivo en cliente
+    if (filtros) {
+        const { busqueda, deporte } = filtros;
+        if (busqueda && busqueda.trim() !== "") {
+            const termino = busqueda.toLowerCase().trim();
+            listaValida = listaValida.filter(
+                (eq) =>
+                    eq.nombreEquipo.toLowerCase().includes(termino) ||
+                    eq.emailCapitan.toLowerCase().includes(termino)
+            );
+        }
+        if (deporte && deporte !== "todos") {
+            listaValida = listaValida.filter((eq) => eq.deporte === deporte);
+        }
+    }
+
+    return listaValida;
+}
+
+
+// cancelar inscripción (DELETE)
+export async function cancelarInscripcion(id: string): Promise<{ id: string }> {
+
+    const respuesta = await fetch(`${API_URL}/posts/${id.replace("eq-", "")}`, {
+        method: "DELETE",
+    });
+
+    if (!respuesta.ok) {
+        throw new Error(
+            `Error HTTP ${respuesta.status}: Fallo al cancelar la inscripción en el servidor`
+        );
+    }
+
+    const listaActual = leerEquiposCache();
+    const nuevaLista = listaActual.filter((e) => e.id !== id);
+    guardarEquiposCache(nuevaLista);
+
+    return { id };
 }

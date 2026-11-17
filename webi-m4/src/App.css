@@ -18,7 +18,6 @@
 }
 
 .header-contenedor {
-  max-width: 900px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -53,24 +52,50 @@
   letter-spacing: -0.02em;
 }
 
+
 /* ==========================================================================
-   SECCIÓN FORMULARIO
+   TABLERO DE DOS COLUMNAS
    ========================================================================== */
-.seccion-formulario {
-  max-width: 900px;
-  width: 100%;
-  margin: 2rem auto;
+.tablero-operaciones {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 2rem;
+  align-items: start;
   padding: 2rem;
+}
+
+@media (max-width: 1080px) {
+  .tablero-operaciones {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ==========================================================================
+   SECCIONES Y CABECERAS
+   ========================================================================== */
+.seccion-formulario,
+.seccion-lista {
   background-color: var(--color-bg-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
 }
 
-.formulario-cabecera {
+.formulario-cabecera,
+.lista-cabecera {
   margin-bottom: 1.5rem;
   border-bottom: 1px solid var(--color-border);
   padding-bottom: 1rem;
+}
+
+.lista-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .insignia-modulo {
@@ -93,6 +118,7 @@
   color: var(--color-text-muted);
   line-height: 1.45;
 }
+
 
 /* ==========================================================================
    ESTRUCTURA Y CAMPOS DEL FORMULARIO
@@ -397,4 +423,443 @@
 
 .boton-cerrar-alerta:hover {
   opacity: 1;
+}
+
+
+
+
+
+
+/* ==========================================================================
+   DIRECTORIO / LISTA DE CONTACTOS
+   ========================================================================== */
+.indicador-refetch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-full);
+}
+
+.spinner-mini {
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 2px solid var(--color-primary-subtle);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: girar 0.6s linear infinite;
+}
+
+.filtros-barra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  background: var(--color-bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  align-items: flex-end;
+}
+
+.filtro-campo {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.filtro-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.filtro-input,
+.filtro-select {
+  padding: 0.5rem 0.75rem;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+.boton-limpiar-filtros {
+  padding: 0.5rem 0.85rem;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  height: 35px;
+}
+
+.boton-limpiar-filtros:hover {
+  color: #fff;
+  border-color: var(--color-text-muted);
+}
+
+.resumen-resultados {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}
+
+/* Grid de Tarjetas */
+.grid-tarjetas {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tarjeta-contacto {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.tarjeta-contacto:hover {
+  border-color: var(--color-border-focus);
+}
+
+.tarjeta-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.badge-id {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--color-text-faint);
+  background: var(--color-bg-surface);
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.2rem;
+  display: inline-block;
+}
+
+.tarjeta-nombre {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.badge-nivel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+}
+
+.badge-nivel-1 {
+  background: #374151;
+  color: #9ca3af;
+}
+
+.badge-nivel-2 {
+  background: #1e3a5f;
+  color: #60a5fa;
+}
+
+.badge-nivel-3 {
+  background: #064e3b;
+  color: #34d399;
+}
+
+.badge-nivel-4 {
+  background: #78350f;
+  color: #fbbf24;
+}
+
+.badge-nivel-5 {
+  background: #831843;
+  color: #f472b6;
+  border: 1px solid #be185d;
+}
+
+.tarjeta-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.tag-especialidad {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #7dd3fc;
+  background: rgba(14, 165, 233, 0.15);
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius-sm);
+}
+
+.tag-disponibilidad {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius-sm);
+}
+
+.tag-disponibilidad-inmediata {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.tag-disponibilidad-24h {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+
+.tag-disponibilidad-programada {
+  background: rgba(107, 114, 128, 0.25);
+  color: #d1d5db;
+}
+
+.tarjeta-detalles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  border-top: 1px solid rgba(55, 65, 81, 0.5);
+  padding-top: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.detalle-linea {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.detalle-icono {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.detalle-enlace {
+  color: #93c5fd;
+}
+
+.detalle-enlace:hover {
+  color: #bfdbfe;
+}
+
+.detalle-justificacion {
+  margin-top: 0.3rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(17, 24, 39, 0.5);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  color: #e5e7eb;
+}
+
+.detalle-justificacion strong {
+  display: block;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.15rem;
+}
+
+.detalle-fecha {
+  font-size: 0.75rem;
+  color: var(--color-text-faint);
+  margin-top: 0.2rem;
+}
+
+.tarjeta-acciones {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(55, 65, 81, 0.4);
+  padding-top: 0.65rem;
+}
+
+.boton-eliminar {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+}
+
+.boton-eliminar:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.25);
+  color: #fff;
+}
+
+.boton-eliminar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   ESTADOS DE CARGA Y VACÍO
+   ========================================================================== */
+.estado-contenedor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.spinner-grande {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 3px solid rgba(56, 189, 248, 0.2);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.texto-cargando {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.esqueleto-grid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.esqueleto-tarjeta {
+  height: 120px;
+  background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+  background-size: 200% 100%;
+  animation: esqueleto-pulso 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+@keyframes esqueleto-pulso {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes girar {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.estado-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background: var(--color-bg-card);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--color-border);
+}
+
+.icono-vacio {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.7;
+}
+
+.estado-vacio h3 {
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 0.35rem;
+}
+
+.estado-vacio p {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  max-width: 380px;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.app-footer {
+  border-top: 1px solid var(--color-border);
+  background: #0d121d;
+  padding: 2rem 1.5rem;
+  margin-top: 3rem;
+}
+
+.footer-contenido {
+  max-width: 1400px;
+  margin: 0 auto;
+  font-size: 0.85rem;
+  color: var(--color-text-faint);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.footer-contenido strong {
+  color: var(--color-text-muted);
+}
+
+.footer-enlaces {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--color-text-faint);
+}
+
+/* Badges y tags para la Liga Universitaria */
+.badge-jugadores {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.tag-deporte {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+}
+
+.tag-categoria {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #a78bfa;
+  background: rgba(167, 139, 250, 0.15);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
 }
