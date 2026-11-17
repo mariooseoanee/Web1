@@ -54,7 +54,7 @@ export default function ListaEquipos() {
     };
 
     const esErrorBonusZod = Boolean(
-        error?.message.includes("BONUS ZOD safeParse")
+        error?.message.includes("[BONUS_ZOD]")
     );
 
     return (
