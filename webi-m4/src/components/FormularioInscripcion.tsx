@@ -48,6 +48,7 @@ export default function FormularioInscripcion() {
         etiqueta: ETIQUETAS_CATEGORIAS[cat],
     }));
 
+    // al enviar el formulario, se muta (mod de datos)
     const onSubmit = (datos: DatosInscripcion) => {
         setMensajeExito(null);
         mutacion.mutate(datos);
